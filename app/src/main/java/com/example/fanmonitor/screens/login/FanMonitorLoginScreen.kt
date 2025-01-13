@@ -38,9 +38,11 @@ import com.example.fanmonitor.R
 import com.example.fanmonitor.components.EmailInput
 import com.example.fanmonitor.components.FanMonitorLogo
 import com.example.fanmonitor.components.PasswordInput
+import com.example.fanmonitor.navigation.FanMonitorScreens
 
 @Composable
-fun FanMonitorLoginScreen(navController: NavController) {
+fun FanMonitorLoginScreen(navController: NavController, viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+                          ) {
 
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
@@ -51,12 +53,15 @@ fun FanMonitorLoginScreen(navController: NavController) {
                 loading = false,
                 isCreateAccount = false
             ) { email, pwd ->
-                //TODO: login
+                viewModel.signInWithEmailAndPassword(email, pwd){
+                    navController.navigate(FanMonitorScreens.HomeScreen.name)
+                }
             }
             else {
                 UserForm(loading = false, isCreateAccount = true) { email, pwd ->
-                    //TODO: create account
-
+                    viewModel.createUserWithEmailAndPassword(email, pwd){
+                        navController.navigate(FanMonitorScreens.HomeScreen.name)
+                    }
                 }
             }
 

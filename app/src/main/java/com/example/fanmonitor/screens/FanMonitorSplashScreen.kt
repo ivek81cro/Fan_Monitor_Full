@@ -25,6 +25,8 @@ import androidx.navigation.NavController
 import com.example.fanmonitor.navigation.FanMonitorScreens
 import kotlinx.coroutines.delay
 import com.example.fanmonitor.components.FanMonitorLogo
+import com.google.firebase.auth.FirebaseAuth
+
 @Composable
 fun FanMonitorSplashScreen(navController: NavController) {
 
@@ -34,8 +36,13 @@ fun FanMonitorSplashScreen(navController: NavController) {
             animationSpec = tween(800,
                 easing = {OvershootInterpolator(8f ).getInterpolation(it)}))
         delay(2000L)
-
-        navController.navigate(FanMonitorScreens.LoginScreen.name)
+        //Check if user is logged in
+        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            navController.navigate(FanMonitorScreens.LoginScreen.name)
+        }
+        else{
+            navController.navigate(FanMonitorScreens.HomeScreen.name)
+        }
     }
 
     Surface(modifier = Modifier

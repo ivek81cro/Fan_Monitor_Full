@@ -1,15 +1,38 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Gradle and Android build outputs
+.gradle/
+.kotlin/
+**/build/
+**/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Local SDK and machine-specific settings
 local.properties
+*.iml
+.idea/
+.DS_Store
+
+# Signing keys and local credentials
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+key.properties
+keystore.properties
+secrets.properties
+.env
+.env.*
+!.env.example
+
+# Firebase configuration (keep local)
+**/google-services.json
+**/GoogleService-Info.plist
+
+# Local project notes
+/PROJECT_CONTEXT.md

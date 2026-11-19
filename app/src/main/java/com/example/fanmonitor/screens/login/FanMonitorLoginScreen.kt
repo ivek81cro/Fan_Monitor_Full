@@ -41,25 +41,30 @@ import com.example.fanmonitor.components.PasswordInput
 import com.example.fanmonitor.navigation.FanMonitorScreens
 
 @Composable
-fun FanMonitorLoginScreen(navController: NavController, viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-                          ) {
-
+fun FanMonitorLoginScreen(
+    navController: NavController,
+    viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             FanMonitorLogo()
-            if (showLoginForm.value) UserForm(
-                loading = false,
-                isCreateAccount = false
-            ) { email, pwd ->
-                viewModel.signInWithEmailAndPassword(email, pwd){
-                    navController.navigate(FanMonitorScreens.HomeScreen.name)
+            if (showLoginForm.value) {
+                UserForm(
+                    loading = false,
+                    isCreateAccount = false
+                ) { email, pwd ->
+                    viewModel.signInWithEmailAndPassword(email, pwd) {
+                        navController.navigate(FanMonitorScreens.HomeScreen.name)
+                    }
                 }
-            }
-            else {
-                UserForm(loading = false, isCreateAccount = true) { email, pwd ->
-                    viewModel.createUserWithEmailAndPassword(email, pwd){
+            } else {
+                UserForm(
+                    loading = false,
+                    isCreateAccount = true
+                ) { email, pwd ->
+                    viewModel.createUserWithEmailAndPassword(email, pwd) {
                         navController.navigate(FanMonitorScreens.HomeScreen.name)
                     }
                 }
@@ -70,17 +75,16 @@ fun FanMonitorLoginScreen(navController: NavController, viewModel: LoginScreenVi
                 modifier = Modifier.padding(15.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-
                 val text = if (showLoginForm.value) "Sign up" else "Login"
                 Text("New user")
-                Text(text,
+                Text(
+                    text,
                     modifier = Modifier
-                        .clickable {
-                            showLoginForm.value = !showLoginForm.value
-                        }
+                        .clickable { showLoginForm.value = !showLoginForm.value }
                         .padding(start = 5.dp),
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary)
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
     }
@@ -91,11 +95,11 @@ fun FanMonitorLoginScreen(navController: NavController, viewModel: LoginScreenVi
 fun UserForm(
     loading: Boolean = false,
     isCreateAccount: Boolean = false,
-    onDone: (String, String) -> Unit = {email, pwd ->}
-){
-    val email = rememberSaveable { mutableStateOf("")}
-    val password = rememberSaveable { mutableStateOf("")}
-    val passwordVisibility = rememberSaveable { mutableStateOf(false)}
+    onDone: (String, String) -> Unit = { _, _ -> }
+) {
+    val email = rememberSaveable { mutableStateOf("") }
+    val password = rememberSaveable { mutableStateOf("") }
+    val passwordVisibility = rememberSaveable { mutableStateOf(false) }
     val passwordFocusRequest = FocusRequester.Default
     val keyboardController = LocalSoftwareKeyboardController.current
     val valid = remember(email.value, password.value) {
@@ -107,18 +111,19 @@ fun UserForm(
         .background(MaterialTheme.colorScheme.background)
         .verticalScroll(rememberScrollState())
 
-    Column(modifier,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        if (isCreateAccount) Text(text = stringResource(R.string.create_acc),
-            modifier = Modifier.padding(4.dp))
-        else Text(text = "")
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        if (isCreateAccount) {
+            Text(text = stringResource(R.string.create_acc), modifier = Modifier.padding(4.dp))
+        }
 
-        EmailInput(emailState = email,
+        EmailInput(
+            emailState = email,
             enabled = !loading,
-            onAction = KeyboardActions { passwordFocusRequest.requestFocus() })
+            onAction = KeyboardActions { passwordFocusRequest.requestFocus() }
+        )
 
-
-        PasswordInput(modifier = Modifier.focusRequester(passwordFocusRequest),
+        PasswordInput(
+            modifier = Modifier.focusRequester(passwordFocusRequest),
             passwordState = password,
             labelId = "Password",
             enabled = !loading,
@@ -126,13 +131,14 @@ fun UserForm(
             onAction = KeyboardActions {
                 if (!valid) return@KeyboardActions
                 onDone(email.value.trim(), password.value.trim())
-            })
+            }
+        )
 
         SubmitButton(
             textId = if (isCreateAccount) "Create Account" else "Login",
             loading = loading,
             validInputs = valid
-        ){
+        ) {
             onDone(email.value.trim(), password.value.trim())
             keyboardController?.hide()
         }

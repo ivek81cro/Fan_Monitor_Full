@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
